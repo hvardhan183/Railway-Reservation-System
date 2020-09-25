@@ -60,25 +60,25 @@ This will start the program and a window pops up and you're good to go. The foll
 HOME  
 │
 └───Login
-│   │
-│ 	└───Forgot Password 
+│	│
+│	└───Forgot Password 
 │	│	│
 │	│	└───Reset Password
 │	│
-│   └───Find Trains
+│	└───Find Trains
 │	│	│
 │	│	└───Available Trains
 │	│		│
 │	│		└───Passenger details - Tickets Booked
 │	│
-│   └───Change Password
+│	└───Change Password
 │	│
 │	└───Booked Ticket History
 │	│
 │	└───Cancel Tickets
 │	│
 │	└───PNR Enquiry
-│   
+│	
 └───Register
 
 ```
