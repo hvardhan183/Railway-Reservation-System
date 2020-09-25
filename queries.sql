@@ -503,25 +503,25 @@ VALUES (12760,57,TO_DATE('2000/01/01 06:24:00','YYYY/MM/DD HH24:MI:SS'),TO_DATE(
 INSERT INTO Train_route (train_no,station_id,train_arrival,train_depart,train_day,route_order)
 VALUES (12760,58,TO_DATE('2000/01/01 08:15:00','YYYY/MM/DD HH24:MI:SS'),TO_DATE('2000/01/01 08:25:00','YYYY/MM/DD HH24:MI:SS'),2,15);
 
-SELECT Train.train_name,Train.train_no,Station.station_name,TO_CHAR(Train_route.train_arrival, 'HH24:MI') AS Arrival_time,
-TO_CHAR(Train_route.train_depart, 'HH24:MI') AS Depart_time,Train_route.train_day FROM
-Train INNER JOIN Train_route ON
-Train.train_no=Train_route.train_no INNER JOIN Station ON Train_route.station_id=Station.station_id 
-ORDER BY Train.train_no, Train_route.route_order;
+-- SELECT Train.train_name,Train.train_no,Station.station_name,TO_CHAR(Train_route.train_arrival, 'HH24:MI') AS Arrival_time,
+-- TO_CHAR(Train_route.train_depart, 'HH24:MI') AS Depart_time,Train_route.train_day FROM
+-- Train INNER JOIN Train_route ON
+-- Train.train_no=Train_route.train_no INNER JOIN Station ON Train_route.station_id=Station.station_id 
+-- ORDER BY Train.train_no, Train_route.route_order;
 
 
-SELECT CONCAT(CONCAT('&date',' '),TO_CHAR(T1.Depart_time, 'HH24:MI:SS')) AS Departure_time,
-CONCAT(CONCAT(TO_DATE('&date')+day2-day1,' '),TO_CHAR(T2.Arrive_time, 'HH24:MI:SS')) AS Arrival_time,
-CONCAT(CONCAT(EXTRACT(DAY FROM ((Arrive_time+day2-day1) - Depart_time))*24 +EXTRACT( HOUR FROM ((Arrive_time+day2-day1) - Depart_time)),':'),
-EXTRACT( MINUTE FROM ((Arrive_time+day2-day1) - Depart_time)) )AS Duration FROM
-((SELECT train_depart AS Depart_time,train_day AS day1 FROM Train_route WHERE train_no=&train_no AND station_id=&station_id)T1 CROSS JOIN
-(SELECT train_arrival AS Arrive_time,train_day AS day2 FROM Train_route WHERE train_no=&train_no AND station_id=&station_id)T2);
+-- SELECT CONCAT(CONCAT('&date',' '),TO_CHAR(T1.Depart_time, 'HH24:MI:SS')) AS Departure_time,
+-- CONCAT(CONCAT(TO_DATE('&date')+day2-day1,' '),TO_CHAR(T2.Arrive_time, 'HH24:MI:SS')) AS Arrival_time,
+-- CONCAT(CONCAT(EXTRACT(DAY FROM ((Arrive_time+day2-day1) - Depart_time))*24 +EXTRACT( HOUR FROM ((Arrive_time+day2-day1) - Depart_time)),':'),
+-- EXTRACT( MINUTE FROM ((Arrive_time+day2-day1) - Depart_time)) )AS Duration FROM
+-- ((SELECT train_depart AS Depart_time,train_day AS day1 FROM Train_route WHERE train_no=&train_no AND station_id=&station_id)T1 CROSS JOIN
+-- (SELECT train_arrival AS Arrive_time,train_day AS day2 FROM Train_route WHERE train_no=&train_no AND station_id=&station_id)T2);
 
 
-SELECT Train.train_name, Train.train_no FROM
-(SELECT T1.train_no FROM Train_route T1 INNER JOIN Train_route T2 
-ON T1.train_no=T2.train_no AND T1.station_id=&start_station AND T2.station_id=&end_station 
-AND T1.route_order<T2.route_order) T3 INNER JOIN Train ON T3.train_no=Train.train_no;
+-- SELECT Train.train_name, Train.train_no FROM
+-- (SELECT T1.train_no FROM Train_route T1 INNER JOIN Train_route T2 
+-- ON T1.train_no=T2.train_no AND T1.station_id=&start_station AND T2.station_id=&end_station 
+-- AND T1.route_order<T2.route_order) T3 INNER JOIN Train ON T3.train_no=Train.train_no;
 
 
 
@@ -535,36 +535,36 @@ AND T1.route_order<T2.route_order) T3 INNER JOIN Train ON T3.train_no=Train.trai
 -- /
 
 
-DECLARE
-	CURSOR Train_list IS SELECT train_no FROM Train;
-	counter NUMBER;
-	seat_count NUMBER;
-	day NUMBER;
-BEGIN
-	day := 1;
-	WHILE day <=20 LOOP
-		FOR k IN Train_list LOOP
-			counter:=1;
-			WHILE counter<=5 LOOP
-				seat_count:=1;
-				WHILE seat_count<=72 LOOP
-					INSERT INTO Train_seats (train_no,coach,seat_no,date_of_journey) VALUES
-					(k.train_no,CONCAT('S',TO_CHAR(counter)),seat_count,TO_DATE(SYSDATE+day,'DD-MM-YYYY'));			
-					INSERT INTO Train_seats (train_no,coach,seat_no,date_of_journey) VALUES
-					(k.train_no,CONCAT('C',TO_CHAR(counter)),seat_count,TO_DATE(SYSDATE+day,'DD-MM-YYYY'));
-					INSERT INTO Train_seats (train_no,coach,seat_no,date_of_journey) VALUES
-					(k.train_no,CONCAT('B',TO_CHAR(counter)),seat_count,TO_DATE(SYSDATE+day,'DD-MM-YYYY'));
-					INSERT INTO Train_seats (train_no,coach,seat_no,date_of_journey) VALUES
-					(k.train_no,CONCAT('A',TO_CHAR(counter)),seat_count,TO_DATE(SYSDATE+day,'DD-MM-YYYY'));
-					seat_count:=seat_count+1;
-				END LOOP;
-				counter:=counter+1;
-			END LOOP;
-		END LOOP;
-		day := day +1;
-	END LOOP;
-END;
-/
+-- DECLARE
+-- 	CURSOR Train_list IS SELECT train_no FROM Train;
+-- 	counter NUMBER;
+-- 	seat_count NUMBER;
+-- 	day NUMBER;
+-- BEGIN
+-- 	day := 1;
+-- 	WHILE day <=20 LOOP
+-- 		FOR k IN Train_list LOOP
+-- 			counter:=1;
+-- 			WHILE counter<=5 LOOP
+-- 				seat_count:=1;
+-- 				WHILE seat_count<=72 LOOP
+-- 					INSERT INTO Train_seats (train_no,coach,seat_no,date_of_journey) VALUES
+-- 					(k.train_no,CONCAT('S',TO_CHAR(counter)),seat_count,TO_DATE(SYSDATE+day,'DD-MM-YYYY'));			
+-- 					INSERT INTO Train_seats (train_no,coach,seat_no,date_of_journey) VALUES
+-- 					(k.train_no,CONCAT('C',TO_CHAR(counter)),seat_count,TO_DATE(SYSDATE+day,'DD-MM-YYYY'));
+-- 					INSERT INTO Train_seats (train_no,coach,seat_no,date_of_journey) VALUES
+-- 					(k.train_no,CONCAT('B',TO_CHAR(counter)),seat_count,TO_DATE(SYSDATE+day,'DD-MM-YYYY'));
+-- 					INSERT INTO Train_seats (train_no,coach,seat_no,date_of_journey) VALUES
+-- 					(k.train_no,CONCAT('A',TO_CHAR(counter)),seat_count,TO_DATE(SYSDATE+day,'DD-MM-YYYY'));
+-- 					seat_count:=seat_count+1;
+-- 				END LOOP;
+-- 				counter:=counter+1;
+-- 			END LOOP;
+-- 		END LOOP;
+-- 		day := day +1;
+-- 	END LOOP;
+-- END;
+-- /
 
 
 CREATE OR REPLACE PROCEDURE Update_tickets IS
@@ -604,38 +604,38 @@ BEGIN
 END;
 /
 
-SET SERVEROUTPUT ON;
-DECLARE
+-- SET SERVEROUTPUT ON;
+-- DECLARE
 
-BEGIN
-	dbms_output.put_line(Ticket_availability(14,38,11019,'A','05-AUG-2020'));
-END;
-/
-
-
-
-INSERT INTO Ticket_details (user_id,passenger_count,train_no,class,start_station,end_station,depart_time,arrival_time,date_of_booking,fare)
-VALUES('wegrf',1,11019,'B',14,20,'2020/04/07 08:00:00','2000/04/07 14:20:00',SYSDATE,600);
-
-INSERT INTO Ticket_booking (pnr_no,passenger_count,passenger_id,passenger_name,gender,age,berth_pref,status)
-VALUES (111111,1,1,'Harsha','M',20,'UB','CNF');
-
-INSERT INTO Seat_status (train_no,coach,seat_no,date_of_journey,pnr_no,pnr_id,status)
-VALUES (11019,'B1',3,'06-APR-2020',111111,1,1);
-
-UPDATE Train_seats SET status=1 WHERE date_of_journey='06-APR-2020' AND train_no=11019 AND coach='B1' AND seat_no=3;
+-- BEGIN
+-- 	dbms_output.put_line(Ticket_availability(14,38,11019,'A','05-AUG-2020'));
+-- END;
+-- /
 
 
-SELECT Ticket_details.pnr_no AS PNR_NO,train.train_no AS Train_no, Train.train_name AS Train_name,S1.station_name AS Start_Station,
-S2.station_name AS End_Station,Ticket_booking.passenger_name AS Name,Ticket_booking.gender AS Gender,
-Ticket_booking.age AS Age,Ticket_booking.status AS Status, Seat_status.coach AS Coach,
-Seat_status.seat_no AS Seat_no, Ticket_details.depart_time AS Departure_time, Ticket_details.arrival_time AS Arrival_time FROM
-Ticket_details INNER JOIN Train ON Ticket_details.train_no=Train.train_no INNER JOIN
-Station S1 ON S1.station_id=Ticket_details.start_station INNER JOIN Station S2 ON 
-S2.station_id=Ticket_details.end_station INNER JOIN 
-Ticket_booking ON Ticket_details.pnr_no=Ticket_booking.pnr_no INNER JOIN
-Seat_status ON Ticket_booking.pnr_no=Seat_status.pnr_no AND Ticket_booking.passenger_id=Seat_status.pnr_id WHERE
-Ticket_details.pnr_no=&pnr_no;
+
+-- INSERT INTO Ticket_details (user_id,passenger_count,train_no,class,start_station,end_station,depart_time,arrival_time,date_of_booking,fare)
+-- VALUES('wegrf',1,11019,'B',14,20,'2020/04/07 08:00:00','2000/04/07 14:20:00',SYSDATE,600);
+
+-- INSERT INTO Ticket_booking (pnr_no,passenger_count,passenger_id,passenger_name,gender,age,berth_pref,status)
+-- VALUES (111111,1,1,'Harsha','M',20,'UB','CNF');
+
+-- INSERT INTO Seat_status (train_no,coach,seat_no,date_of_journey,pnr_no,pnr_id,status)
+-- VALUES (11019,'B1',3,'06-APR-2020',111111,1,1);
+
+-- UPDATE Train_seats SET status=1 WHERE date_of_journey='06-APR-2020' AND train_no=11019 AND coach='B1' AND seat_no=3;
+
+
+-- SELECT Ticket_details.pnr_no AS PNR_NO,train.train_no AS Train_no, Train.train_name AS Train_name,S1.station_name AS Start_Station,
+-- S2.station_name AS End_Station,Ticket_booking.passenger_name AS Name,Ticket_booking.gender AS Gender,
+-- Ticket_booking.age AS Age,Ticket_booking.status AS Status, Seat_status.coach AS Coach,
+-- Seat_status.seat_no AS Seat_no, Ticket_details.depart_time AS Departure_time, Ticket_details.arrival_time AS Arrival_time FROM
+-- Ticket_details INNER JOIN Train ON Ticket_details.train_no=Train.train_no INNER JOIN
+-- Station S1 ON S1.station_id=Ticket_details.start_station INNER JOIN Station S2 ON 
+-- S2.station_id=Ticket_details.end_station INNER JOIN 
+-- Ticket_booking ON Ticket_details.pnr_no=Ticket_booking.pnr_no INNER JOIN
+-- Seat_status ON Ticket_booking.pnr_no=Seat_status.pnr_no AND Ticket_booking.passenger_id=Seat_status.pnr_id WHERE
+-- Ticket_details.pnr_no=&pnr_no;
 
 
 
@@ -827,21 +827,21 @@ BEGIN
 END;
 /
 
-SELECT Ticket_details.pnr_no,S1.station_name,S2.station_name,Train.train_name,TO_CHAR(Ticket_details.depart_time,'DD-MM-YYYY'),
-TO_CHAR(Ticket_details.date_of_booking,'DD-MM-YYYY') FROM Ticket_details INNER JOIN Train ON Train.train_no=Ticket_details.train_no INNER JOIN Station S1 ON
-S1.station_id=Ticket_details.start_station INNER JOIN Station S2 ON S2.station_id=Ticket_details.end_station WHERE Ticket_details.user_id='&user_id'
-ORDER BY TO_CHAR(Ticket_details.depart_time,'DD-MM-YYYY'),TO_CHAR(Ticket_details.date_of_booking,'DD-MM-YYYY') DESC;
+-- SELECT Ticket_details.pnr_no,S1.station_name,S2.station_name,Train.train_name,TO_CHAR(Ticket_details.depart_time,'DD-MM-YYYY'),
+-- TO_CHAR(Ticket_details.date_of_booking,'DD-MM-YYYY') FROM Ticket_details INNER JOIN Train ON Train.train_no=Ticket_details.train_no INNER JOIN Station S1 ON
+-- S1.station_id=Ticket_details.start_station INNER JOIN Station S2 ON S2.station_id=Ticket_details.end_station WHERE Ticket_details.user_id='&user_id'
+-- ORDER BY TO_CHAR(Ticket_details.depart_time,'DD-MM-YYYY'),TO_CHAR(Ticket_details.date_of_booking,'DD-MM-YYYY') DESC;
 
-INSERT INTO Ticket_details (user_id,passenger_count,train_no,class,start_station,end_station,depart_time,arrival_time,date_of_booking,fare)
-VALUES('wegrf',1,11019,'B',14,20,'2020/04/07 08:00:00','2000/04/07 14:20:00',SYSDATE,600);
+-- INSERT INTO Ticket_details (user_id,passenger_count,train_no,class,start_station,end_station,depart_time,arrival_time,date_of_booking,fare)
+-- VALUES('wegrf',1,11019,'B',14,20,'2020/04/07 08:00:00','2000/04/07 14:20:00',SYSDATE,600);
 
-INSERT INTO Ticket_booking (pnr_no,passenger_count,passenger_id,passenger_name,gender,age,berth_pref,status)
-VALUES (111111,1,1,'Harsha','M',20,'UB','CNF');
+-- INSERT INTO Ticket_booking (pnr_no,passenger_count,passenger_id,passenger_name,gender,age,berth_pref,status)
+-- VALUES (111111,1,1,'Harsha','M',20,'UB','CNF');
 
-INSERT INTO Seat_status (train_no,coach,seat_no,date_of_journey,pnr_no,pnr_id,status)
-VALUES (11019,'B1',3,'06-APR-2020',111111,1,1);
+-- INSERT INTO Seat_status (train_no,coach,seat_no,date_of_journey,pnr_no,pnr_id,status)
+-- VALUES (11019,'B1',3,'06-APR-2020',111111,1,1);
 
-UPDATE Train_seats SET status=1 WHERE date_of_journey='06-APR-2020' AND train_no=11019 AND coach='B1' AND seat_no=3;
+-- UPDATE Train_seats SET status=1 WHERE date_of_journey='06-APR-2020' AND train_no=11019 AND coach='B1' AND seat_no=3;
 
 
 CREATE OR REPLACE PROCEDURE Cancel_ticket(pnr_number IN NUMBER,pn_id IN NUMBER) IS
@@ -959,18 +959,18 @@ END;
 
 
 
-INSERT INTO Ticket_details (user_id,passenger_count,train_no,class,start_station,end_station,depart_time,arrival_time,date_of_booking,fare)
-VALUES('wegrf',1,11019,'B',20,25,'2020/04/07 14:20:00','2000/04/07 17:20:00',SYSDATE,600);
+-- INSERT INTO Ticket_details (user_id,passenger_count,train_no,class,start_station,end_station,depart_time,arrival_time,date_of_booking,fare)
+-- VALUES('wegrf',1,11019,'B',20,25,'2020/04/07 14:20:00','2000/04/07 17:20:00',SYSDATE,600);
 
-DECLARE
+-- DECLARE
 
-BEGIN
-	Book_ticket(20,25,11019,'B','07-APR-2020',111139,'UB',1,1,'mol','M',20);
-END;
-/
+-- BEGIN
+-- 	Book_ticket(20,25,11019,'B','07-APR-2020',111139,'UB',1,1,'mol','M',20);
+-- END;
+-- /
 
 
-SELECT T1.class,(SELECT route_order FROM Train_route 
-WHERE train_no=T1.train_no AND station_id=T1.start_station)+1,T1.train_no,Ticket_booking.status FROM Ticket_details T1 INNER JOIN Ticket_booking ON
-T1.pnr_no=Ticket_booking.pnr_no WHERE Ticket_booking.passenger_id=&choice AND T1.pnr_no=&pnr_number;
+-- SELECT T1.class,(SELECT route_order FROM Train_route 
+-- WHERE train_no=T1.train_no AND station_id=T1.start_station)+1,T1.train_no,Ticket_booking.status FROM Ticket_details T1 INNER JOIN Ticket_booking ON
+-- T1.pnr_no=Ticket_booking.pnr_no WHERE Ticket_booking.passenger_id=&choice AND T1.pnr_no=&pnr_number;
 
