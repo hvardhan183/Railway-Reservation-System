@@ -25,8 +25,60 @@ Functionalities included:
 
 ## Requirements
 
-python3 (Tkinter, cx_Oracle)
-Oracle SQL 
+* python3 
+	- Tkinter
+	- cx_Oracle
+* Oracle SQL 
 
 ## Instructions
 
+Before starting off with the program, make sure that you've Oracle SQL installed in your local machine and running on the localhost.
+
+Once you have Oracle SQL installed, create a user with a username and password of your choice. Make sure you give all the privileges to the user. 
+
+Now run the `queries.sql` file by using the following command in SQL Plus.
+
+```
+@path/to/the/file/queries.sql
+```
+
+This will create all the required tables, insert the details of all the trains and create procedures and functions for different functionalities.
+
+Now with all the data ready and the server running on localhost, you can go to `RailwayReservationSystem.py` file.
+
+Change the variables on *line 118* and *line 119* to your username and password.
+
+Now go ahead and run the following command to start the program.
+
+```
+python3 RailwayReservationSystem.py
+```
+
+This will start the program and a window pops up and you're good to go. The following tree shows different functionalities in the program.
+
+```
+HOME  
+│
+└───Login
+│   │
+│ 	└───Forgot Password 
+│	│	│
+│	│	└───Reset Password
+│	│
+│   └───Find Trains
+│	│	│
+│	│	└───Available Trains
+│	│		│
+│	│		└───Passenger details - Tickets Booked
+│	│
+│   └───Change Password
+│	│
+│	└───Booked Ticket History
+│	│
+│	└───Cancel Tickets
+│	│
+│	└───PNR Enquiry
+│   
+└───Register
+
+```

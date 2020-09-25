@@ -974,3 +974,4 @@ END;
 -- WHERE train_no=T1.train_no AND station_id=T1.start_station)+1,T1.train_no,Ticket_booking.status FROM Ticket_details T1 INNER JOIN Ticket_booking ON
 -- T1.pnr_no=Ticket_booking.pnr_no WHERE Ticket_booking.passenger_id=&choice AND T1.pnr_no=&pnr_number;
 
+COMMIT;

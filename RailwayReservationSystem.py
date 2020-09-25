@@ -115,6 +115,9 @@ faredict={'AC 1 TIER (1A)':1.25,'AC 2 TIER (2A)':1,'AC 3 TIER (3A)':0.75,'SLEEPE
 berthdict={"Upper":'UB', "Middle":'MB', "Lower":'LB', "Side-upper":'SU',"Side-lower":'SL'}
 genderdict={'Male':'M','Female':'F','Other':'O'}
 date_format = '%d-%m-%Y'
+oracle_username = 'username'
+oracle_password = 'password'
+
 
 class main:
 	def __init__(self,master):
@@ -172,7 +175,7 @@ class main:
 		if self.userNameLog.get()=='' or self.passwordLog.get()=='':
 			ms.showerror('Oops!','Enter all the details!')
 		else:
-			con = cx_Oracle.connect('username/password@localhost')
+			con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 			cursor=con.cursor()
 			cursor.prepare('SELECT * FROM User_details WHERE user_id= :user_id AND password=:password')
 			cursor.execute(None,{'user_id':self.userNameLog.get(),'password':self.passwordLog.get()})
@@ -201,7 +204,7 @@ class main:
 		elif len(self.userName.get())<=4:
 			ms.showerror('Oops!','Username should be at least 5 characters long!')
 		else:
-			con = cx_Oracle.connect('username/password@localhost')
+			con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 			cursor=con.cursor()
 			cursor.prepare('SELECT * FROM User_details WHERE user_id= :user_id')
 			cursor.execute(None,{'user_id':self.userName.get()})
@@ -233,7 +236,7 @@ class main:
 			con.commit()
 
 	def getsecdetails(self):
-		con = cx_Oracle.connect('username/password@localhost')
+		con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 		cursor=con.cursor()
 		if self.recUserName.get()!='':
 			cursor.prepare('SELECT security_ques,security_ans FROM User_details WHERE user_id= :user_id')
@@ -288,7 +291,7 @@ class main:
 		elif self.upPassword.get()!=self.confUpPassword.get():
 			ms.showerror('Oops!','Passwords do not match!')
 		else:
-			con = cx_Oracle.connect('username/password@localhost')
+			con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 			cursor=con.cursor()
 			if self.recOption==0:
 				cursor.prepare('UPDATE User_details SET password=:password WHERE user_id= :user_id')
@@ -311,7 +314,7 @@ class main:
 		elif self.changeNewPassword.get()!=self.confChangeNewPassword.get():
 			ms.showerror('Oops!','Passwords do not match!')
 		else:
-			con = cx_Oracle.connect('username/password@localhost')
+			con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 			cursor=con.cursor()
 			cursor.prepare('SELECT password FROM User_details WHERE user_id= :user_id')
 			cursor.execute(None,{'user_id':self.userNameLog.get()})
@@ -336,7 +339,7 @@ class main:
 			b=datetime.strptime(date.today().strftime("%d-%m-%Y"),'%d-%m-%Y')
 			no_days=a-b
 			if no_days.days<=20 and no_days.days>0:
-				con = cx_Oracle.connect('username/password@localhost')
+				con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 				cursor=con.cursor()
 				res1 = [int(i) for i in self.toStation.get().split() if i.isdigit()]
 				temp_to=res1[0]
@@ -389,7 +392,7 @@ class main:
 			temp_to=res1[0]
 			res2 = [int(i) for i in self.fromStation.get().split() if i.isdigit()]
 			temp_from=res2[0]
-			con = cx_Oracle.connect('username/password@localhost')
+			con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 			cursor=con.cursor()
 			cursor.execute("ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MM-YYYY'")
 			cursor.prepare("SELECT CONCAT(CONCAT(:date_1,' '),TO_CHAR(T1.Depart_time, 'HH24:MI:SS')) AS Departure_time,\
@@ -420,7 +423,7 @@ class main:
 			ms.showerror('Oops!','Enter all the details!')
 
 	def ticketdetails(self,pnr_num):
-		con = cx_Oracle.connect('username/password@localhost')
+		con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 		cursor=con.cursor()
 		cursor.prepare("SELECT Ticket_details.pnr_no AS PNR_NO,train.train_no AS Train_no, Train.train_name AS Train_name,S1.station_name AS Start_Station,\
 			S2.station_name AS End_Station,Ticket_booking.passenger_name AS Name,Ticket_booking.gender AS Gender,\
@@ -531,7 +534,7 @@ class main:
 	def canceltickets(self):
 		print(self.cancelchoice.get())
 		print(self.pnrdetail.get())
-		con = cx_Oracle.connect('username/password@localhost')
+		con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 		cursor=con.cursor()
 		cursor.callproc('Cancel_ticket',[int(self.pnrdetail.get()),int(self.cancelchoice.get())])
 		ms.showinfo('Success','Tickets cancelled!')
@@ -539,7 +542,7 @@ class main:
 		self.trainbetstation()
 
 	def cancelticketsel(self):
-		con = cx_Oracle.connect('username/password@localhost')
+		con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 		cursor=con.cursor()
 		cursor.prepare("SELECT Ticket_details.pnr_no AS PNR_NO,train.train_no AS Train_no, Train.train_name AS Train_name,S1.station_name AS Start_Station,\
 			S2.station_name AS End_Station,Ticket_booking.passenger_name AS Name,Ticket_booking.gender AS Gender,\
@@ -608,7 +611,7 @@ class main:
 		self.cancelticketselpack.pack()
 
 	def cancelticketdetails(self):
-		con = cx_Oracle.connect('username/password@localhost')
+		con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 		cursor=con.cursor()
 		cursor.prepare("SELECT Ticket_details.pnr_no,S1.station_name,S2.station_name,Train.train_name,Train.train_no,TO_CHAR(Ticket_details.depart_time,'DD-MM-YYYY'),\
 			TO_CHAR(Ticket_details.date_of_booking,'DD-MM-YYYY') FROM Ticket_details INNER JOIN Train ON Train.train_no=Ticket_details.train_no \
@@ -650,7 +653,7 @@ class main:
 		self.cancelticketdetailspack.pack()
 
 	def bookedtickets(self):
-		con = cx_Oracle.connect('username/password@localhost')
+		con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 		cursor=con.cursor()
 		cursor.prepare("SELECT Ticket_details.pnr_no,S1.station_name,S2.station_name,Train.train_name,Train.train_no,TO_CHAR(Ticket_details.depart_time,'DD-MM-YYYY'),\
 			TO_CHAR(Ticket_details.date_of_booking,'DD-MM-YYYY') FROM Ticket_details INNER JOIN Train ON Train.train_no=Ticket_details.train_no \
@@ -693,7 +696,7 @@ class main:
 		if self.pnrdetail.get()=='':
 			ms.showerror('Oops!','Select a PNR Number!')
 		else:
-			con = cx_Oracle.connect('username/password@localhost')
+			con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 			cursor=con.cursor()
 			cursor.prepare("SELECT * FROM Ticket_booking WHERE pnr_no=:pnr_no")
 			cursor.execute(None,{'pnr_no':self.pnrdetail.get()})
@@ -966,7 +969,7 @@ class main:
 		enquiry.add_command(label = "PNR Enquiry",command=self.pnrenq)
 		enquiry.add_command(label = "Train Schedule")
 
-		con = cx_Oracle.connect('username/password@localhost')
+		con = cx_Oracle.connect(oracle_username+'/'+oracle_password+'@localhost')
 		cursor=con.cursor()
 
 		cursor.execute('SELECT * FROM Station')
